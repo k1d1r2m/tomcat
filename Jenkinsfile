@@ -3,8 +3,7 @@ pipeline {
         stages {  
        	    stage("git_checkout") {  
            	    steps {  
-              	    echo "cloning repository" 
-              	    echo "repo cloned successfully"  
+              	      git branch: 'veedhi', url: 'https://github.com/veedhi25/onlinebookstore.git'  
               	    }  
          	    } 
         }

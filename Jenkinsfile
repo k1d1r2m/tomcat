@@ -38,6 +38,17 @@ pipeline {
                     sh "docker images"
                 }
             }
-        }             
+        } 
+         stage("deploy to hub") {
+              steps {
+                  withCredentials([usernameColonPassword(credentialsId: 'hubcred', usernamevariable: 'USERNAME',Passwordvariable: 
+          'PASSWORD')]) { 
+                      sh'echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin'}
+                         echo "login succesfully"
+              }
+         }
+                                      
+                      
     }
+    
 }

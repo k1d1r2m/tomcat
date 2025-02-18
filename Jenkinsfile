@@ -4,6 +4,7 @@ pipeline {
 	environment {
 		MAVEN_HOME = tool 'maven3.9.0' //maven tool installed in jenkins level
 		IMAGE_NAME = 'veedhi1995/onlinestore-java-tomcat'
+		GIT_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
 		IMAGE_TAG  =  '${IMAGE_NAME}:${env.GIT_COMMIT}'
 
 	}

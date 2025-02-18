@@ -57,14 +57,23 @@ pipeline {
                     }
                 }
             }
-        }
-		stage("deploy to k8s") {
-			stages{
-				sh  'kubectl config user-context kubernetes-admin@kubernetes'
-				sh  'kubectl config current-context'
-				sh  "kubectl set image deployment/onlinebookstore  onlinebookstore=${IMAGE_TAG} -n onlinebookstore-ns"
+	}
+       stage("Deploy to Kubernetes") {
+            steps {
+                script {
+                    // Set Kubernetes context
+                    sh "kubectl config use-context kubernetes-admin@kubernetes"
+                    sh "kubectl config current-context"
 
-			}
-		}
+                    // Update deployment with new image
+                    def LATEST_TAG = "${IMAGE_NAME}:latest"
+                    sh "kubectl set image deployment/onlinebookstore onlinebookstore=${LATEST_TAG} -n onlinebookstore-ns"
+
+                    // Ensure changes are applied
+                    sh "kubectl rollout restart deployment onlinebookstore -n onlinebookstore-ns"
+                    echo "Deployment updated successfully"
+                }
+            }
+        }	
     }
 }

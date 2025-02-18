@@ -1,4 +1,4 @@
-FROM  tomcat:lastest   
+FROM  tomcat:latest   
 # set env variables
 ENV CATALINA_HOME /usr/local/tomcat
 ENV APP_NAME onlinebookstore

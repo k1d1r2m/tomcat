@@ -39,16 +39,23 @@ pipeline {
                 }
             }
         } 
-         stage("deploy to hub") {
-              steps {
-                  withCredentials([usernameColonPassword(credentialsId: 'hubcred', usernamevariable: 'USERNAME',Passwordvariable: 
-          'PASSWORD')]) { 
-                      sh'echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin'}
-                         echo "login succesfully"
-              }
-         }
-                                      
-                      
+
+        stage("Deploy to Docker Hub") {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'hubcred', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) { 
+                    sh "echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin"
+                    echo "Login successful"
+
+                    script {
+                        def GIT_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                        def IMAGE_TAG = "${IMAGE_NAME}:${GIT_COMMIT}"
+
+                        echo "Pushing Docker image: ${IMAGE_TAG}"
+                        sh "docker push ${IMAGE_TAG}"
+                        echo "Image pushed successfully"
+                    }
+                }
+            }
+        }
     }
-    
 }

@@ -4,6 +4,7 @@ pipeline {
     environment {
         MAVEN_HOME = tool 'maven3.9.0' // Maven tool installed in Jenkins
         IMAGE_NAME = 'veedhi1995/onlinestore-java-tomcat'
+		KUBECONFIG = credentials('yamlcred')
     }
 
     stages {  
@@ -57,5 +58,13 @@ pipeline {
                 }
             }
         }
+		stage("deploy to k8s") {
+			stages{
+				sh  'kubectl config user-context kubernetes-admin@kubernetes'
+				sh  'kubectl config current-context'
+				sh  "kubectl set image deployment/onlinebookstore  onlinebookstore=${IMAGE_TAG} -n onlinebookstore-ns"
+
+			}
+		}
     }
 }

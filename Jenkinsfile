@@ -8,13 +8,13 @@ pipeline {
     }
 
     stages {
-        stage("code push") {
+        stage("git checkout") {
             steps {
                 git branch: 'veedhi', url: 'https://github.com/veedhi25/onlinebookstore.git'
             }
         }
 
-        stage("Build") {
+        stage("clearBuild") {
             steps {
                 script {
                     sh "${MAVEN_HOME}/bin/mvn clean package"

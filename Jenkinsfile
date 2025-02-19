@@ -8,7 +8,7 @@ pipeline {
     }
 
     stages {
-        stage("Code Checkout") {
+        stage("code push") {
             steps {
                 git branch: 'veedhi', url: 'https://github.com/veedhi25/onlinebookstore.git'
             }
